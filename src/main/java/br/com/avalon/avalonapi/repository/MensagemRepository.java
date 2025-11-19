@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface MensagemRepository extends JpaRepository<Mensagem, Long> {
-    List<Mensagem> findByDestinatarioIdAndLidaFalse(Long id); // TODO Implementar!!!!!
+    List<Mensagem> findByDestinatarioIdAndLidaFalse(Long id);
 }

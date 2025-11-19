@@ -236,4 +236,22 @@ public class GuildaService {
         }
         return false;
     }
+
+    @Transactional
+    public void aceitarLideranca(Long personagemId, Long guildaId) {
+        Guilda guilda = guildaRepository.findById(guildaId)
+                .orElseThrow(() -> new IllegalArgumentException("Guilda não encontrada."));
+
+        Personagem novoLider = personagemRepository.findById(personagemId)
+                .orElseThrow(() -> new IllegalArgumentException("Personagem não encontrado."));
+
+        // Atualiza a guilda
+        guilda.transferirLideranca(personagemId);
+        guildaRepository.save(guilda);
+
+        // Limpa pendência do personagem se houver
+        novoLider.setGuildaLiderancaPendenteId(null);
+        personagemRepository.save(novoLider);
+    }
+
 }

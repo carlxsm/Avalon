@@ -13,4 +13,7 @@ public class EstrategiaStatusAnao implements EstrategiaStatus {
     public int getPrecisaoBase(int nivel) { return 6 + nivel * 2; }
     @Override
     public int getDestrezaBase(int nivel) { return 4 + nivel * 1; }
+
+    @Override public int getPontosVidaBase(int nivel) { return 130 + (nivel * 12); }
+    @Override public int getPontosManaBase(int nivel) { return 30 + (nivel * 3); }
 }

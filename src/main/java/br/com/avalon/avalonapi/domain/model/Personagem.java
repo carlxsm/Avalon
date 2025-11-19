@@ -1,15 +1,10 @@
 package br.com.avalon.avalonapi.domain.model;
 
-import br.com.avalon.avalonapi.domain.enums.Classe;
-import br.com.avalon.avalonapi.domain.enums.Raca;
-import br.com.avalon.avalonapi.domain.enums.SlotEquipamento;
+import br.com.avalon.avalonapi.domain.enums.*;
 import jakarta.persistence.*;
 
-import javax.persistence.*;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Entity
 public class Personagem {
@@ -41,7 +36,7 @@ public class Personagem {
     @MapKeyEnumerated(EnumType.STRING)
     @MapKeyColumn(name = "slot_equipamento")
     @Column(name = "item_id")
-    private Map<SlotEquipamento, Item> itensEquipados = new HashMap<>(); // Inicialize para evitar NullPointerException
+    private Map<SlotEquipamento, Itens> itensEquipados = new HashMap<>(); // Inicialize para evitar NullPointerException
 
     private Long guildaId; // Referência a guilda que o personagem pertence
     private Long guildaLiderancaPendenteId; // Para Abordagem 2 de notificação de liderança
@@ -74,8 +69,8 @@ public class Personagem {
     public void setPontosManaMax(int pontosManaMax) { this.pontosManaMax = pontosManaMax; }
     public Inventario getInventario() { return inventario; }
     public void setInventario(Inventario inventario) { this.inventario = inventario; }
-    public Map<SlotEquipamento, Item> getItensEquipados() { return itensEquipados; }
-    public void setItensEquipados(Map<SlotEquipamento, Item> itensEquipados) { this.itensEquipados = itensEquipados; }
+    public Map<SlotEquipamento, Itens> getItensEquipados() { return itensEquipados; }
+    public void setItensEquipados(Map<SlotEquipamento, Itens> itensEquipados) { this.itensEquipados = itensEquipados; }
     public Long getGuildaId() { return guildaId; }
     public void setGuildaId(Long guildaId) { this.guildaId = guildaId; }
     public Long getGuildaLiderancaPendenteId() { return guildaLiderancaPendenteId; }
@@ -206,7 +201,7 @@ public class Personagem {
     }
 
     // Métodos para equipar/desequipar itens
-    public boolean equiparItem(Item item) {
+    public boolean equiparItem(Itens item) {
         if (item.getTipo() == TipoItem.EQUIPAMENTO &&
                 item.getSlotEquipamento() != null) {
 
@@ -214,7 +209,7 @@ public class Personagem {
             if (this.classe.podeEquipar(item.getTipo(), item.getSlotEquipamento())) {
                 // Desequipar item existente no slot, se houver
                 if (itensEquipados.containsKey(item.getSlotEquipamento())) {
-                    Item itemDesequipado = itensEquipados.remove(item.getSlotEquipamento());
+                    Itens itemDesequipado = itensEquipados.remove(item.getSlotEquipamento());
                     if (this.inventario != null) {
                         this.inventario.adicionarItem(itemDesequipado, 1); // Retorna para o inventário
                     }
@@ -231,7 +226,7 @@ public class Personagem {
 
     public boolean desequiparItem(SlotEquipamento slot) {
         if (itensEquipados.containsKey(slot)) {
-            Item itemDesequipado = itensEquipados.remove(slot);
+            Itens itemDesequipado = itensEquipados.remove(slot);
             if (this.inventario != null) {
                 this.inventario.adicionarItem(itemDesequipado, 1); // Retorna para o inventário
             }

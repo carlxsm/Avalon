@@ -15,4 +15,8 @@ public class EstrategiaStatusHumano implements EstrategiaStatus {
     public int getPrecisaoBase(int nivel) { return 8 + nivel * 2; }
     @Override
     public int getDestrezaBase(int nivel) { return 6 + nivel * 2; }
+
+
+    @Override public int getPontosVidaBase(int nivel) { return 100 + (nivel * 10); }
+    @Override public int getPontosManaBase(int nivel) { return 50 + (nivel * 5); }
 }

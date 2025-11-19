@@ -115,7 +115,7 @@ public class PersonagemService {
     public ItemInventario adicionarItemAoInventario(Long personagemId, Long itemId, int quantidade) {
         Personagem personagem = personagemRepository.findById(personagemId)
                 .orElseThrow(() -> new IllegalArgumentException("Personagem não encontrado."));
-        Item item = itemRepository.findById(itemId)
+        Itens item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado."));
 
         Inventario inventario = personagem.getInventario();
@@ -142,7 +142,7 @@ public class PersonagemService {
     public boolean removerItemDoInventario(Long personagemId, Long itemId, int quantidade) {
         Personagem personagem = personagemRepository.findById(personagemId)
                 .orElseThrow(() -> new IllegalArgumentException("Personagem não encontrado."));
-        Item item = itemRepository.findById(itemId)
+        Itens item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado."));
 
         Inventario inventario = personagem.getInventario();
@@ -161,7 +161,7 @@ public class PersonagemService {
     public boolean equiparItem(Long personagemId, Long itemId) {
         Personagem personagem = personagemRepository.findById(personagemId)
                 .orElseThrow(() -> new IllegalArgumentException("Personagem não encontrado."));
-        Item item = itemRepository.findById(itemId)
+        Itens item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("Item não encontrado."));
 
         // A lógica de equipar item já está na classe Personagem
@@ -201,14 +201,10 @@ public class PersonagemService {
 
         for (Mensagem msg : mensagensNaoLidas) {
             if (msg.getTipo() == TipoMensagem.TRANSFERENCIA_LIDERANCA) {
-                // Lógica para perguntar se aceita a liderança
-                // Por enquanto, vamos assumir que aceita automaticamente para teste
-                // Em um cenário real, você teria um endpoint ou lógica para o jogador aceitar/recusar.
                 guildaService.aceitarLideranca(personagem.getId(), msg.getReferenciaId());
             }
             msg.setLida(true);
             mensagemRepository.save(msg);
-            System.out.println("Mensagem para " + personagem.getNome() + ": " + msg.getTitulo() + " - " + msg.getConteudo());
         }
     }
 

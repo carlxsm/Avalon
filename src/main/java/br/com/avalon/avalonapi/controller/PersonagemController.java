@@ -3,6 +3,8 @@ package br.com.avalon.avalonapi.controller;
 import br.com.avalon.avalonapi.domain.enums.SlotEquipamento;
 import br.com.avalon.avalonapi.domain.model.ItemInventario;
 import br.com.avalon.avalonapi.domain.model.Personagem;
+import br.com.avalon.avalonapi.dto.ItemAdicionarDTO;
+import br.com.avalon.avalonapi.dto.PersonagemCriacaoDTO;
 import br.com.avalon.avalonapi.service.PersonagemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
