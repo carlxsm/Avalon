@@ -1,186 +1,93 @@
-<documentação-api>
-    <titulo>API Avalon - Backend</titulo>
-    <subtitulo>Documentação dos Endpoints e Arquitetura de Status</subtitulo>
-    
-    <seção id="arquitetura-status">
-        <titulo>Padrão Strategy para Cálculo de Status Base</titulo>
-        <descrição>
-            O cálculo dos atributos base de um personagem (HP, Mana, Ataques, Defesas, Precisão e Destreza) é implementado utilizando o padrão **Strategy**.
-            Este padrão desacopla o algoritmo de cálculo do objeto Personagem, permitindo que cada Raça ou Classe (Estratégia) defina sua própria curva de crescimento baseada no Nível.
-        </descrição>
+-----
 
-        <subseção id="interface-estrategia">
-            <titulo>Interface EstrategiaStatus</titulo>
-            <código-java>
-                <![CDATA[
+# ⚔️ Avalon API - Backend Documentation 🛡️
+
+A **Avalon API** é o *backend* do sistema de gerenciamento de dados de um projeto de RPG/MMORPG, responsável por Personagens, Itens e Guildas. Esta documentação abrange a arquitetura central e a referência completa dos *endpoints* da API.
+
+-----
+
+## 📐 Padrão de Arquitetura: Status Strategy
+
+O cálculo dos atributos base (HP, Mana, Ataques, Defesas, etc.) de um personagem é determinado por sua Raça/Classe, que define uma curva de crescimento específica.
+
+Para garantir flexibilidade e manutenibilidade, o projeto implementa o padrão de *design* **Strategy**. Cada Raça ou Classe é mapeada para uma estratégia de cálculo que implementa a interface `EstrategiaStatus`.
+
+### Interface Principal (`EstrategiaStatus`)
+
+Esta interface define o contrato para todas as lógicas de cálculo de atributos base, recebendo o `nivel` como parâmetro:
+
+```java
 public interface EstrategiaStatus {
     int getAtaqueMagicoBase(int nivel);
     int getAtaqueFisicoBase(int nivel);
     int getDefesaMagicaBase(int nivel);
-    int getDefesaFisicaBase(int nivel);
-    int getPrecisaoBase(int nivel);
-    int getDestrezaBase(int nivel);
+    // ... outros getters para DefesaFisica, Precisao, Destreza
     int getPontosVidaBase(int nivel);
     int getPontosManaBase(int nivel);
 }
-                ]]>
-            </código-java>
-        </subseção>
+```
 
-        <subseção id="exemplos-formulas">
-            <titulo>Fórmulas de Cálculo (Exemplos)</titulo>
-            <tabela>
-                <colunas>
-                    <coluna>Estratégia</coluna>
-                    <coluna>HP Base (getPontosVidaBase)</coluna>
-                    <coluna>Mana Base (getPontosManaBase)</coluna>
-                    <coluna>ATK Físico Base</coluna>
-                    <coluna>ATK Mágico Base</coluna>
-                </colunas>
-                <linhas>
-                    <linha>
-                        <celula>Guerreiro</celula>
-                        <celula>$150 + (nivel \times 15)$</celula>
-                        <celula>$20 + (nivel \times 2)$</celula>
-                        <celula>$15 + (nivel \times 4)$</celula>
-                        <celula>$2 + (nivel \times 1)$</celula>
-                    </linha>
-                    <linha>
-                        <celula>Mago</celula>
-                        <celula>$70 + (nivel \times 6)$</celula>
-                        <celula>$200 + (nivel \times 20)$</celula>
-                        <celula>$5 + (nivel \times 1)$</celula>
-                        <celula>$12 + (nivel \times 4)$</celula>
-                    </linha>
-                    <linha>
-                        <celula>Humano</celula>
-                        <celula>$100 + (nivel \times 10)$</celula>
-                        <celula>$50 + (nivel \times 5)$</celula>
-                        <celula>$10 + (nivel \times 3)$</celula>
-                        <celula>$5 + (nivel \times 2)$</celula>
-                    </linha>
-                </linhas>
-            </tabela>
-        </subseção>
-    </seção>
+### Exemplos de Fórmulas de Status Base
 
-    <seção id="documentacao-endpoints">
-        <titulo>Endpoints da API (Testes Postman)</titulo>
-        <base-url>http://localhost:8080/api</base-url>
+Abaixo estão alguns exemplos de como as estratégias concretas definem os *status* de um personagem.
 
-        <controller nome="Personagem Controller">
-            <endpoint>
-                <nome>1. Criar Personagem</nome>
-                <metodo>POST</metodo>
-                <url>/personagens</url>
-                <body-json>
-                    <![CDATA[{"nome": "Kratos_God", "raca": "HUMANO", "classe": "GUERREIRO"}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>2. Listar Todos</nome>
-                <metodo>GET</metodo>
-                <url>/personagens</url>
-            </endpoint>
-            <endpoint>
-                <nome>4. Atualizar Personagem</nome>
-                <metodo>PUT</metodo>
-                <url>/personagens/1000</url>
-                <body-json>
-                    <![CDATA[{"nome": "Lord_Chaos_Renascido", "nivel": 181, "experiencia": 15500000, "pontosVidaAtual": 5000, "pontosVidaMax": 5000}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>6. Ganhar XP</nome>
-                <metodo>POST</metodo>
-                <url>/personagens/1000/ganhar-xp?xp=50000</url>
-                <obs>XP via Query Parameter.</obs>
-            </endpoint>
-            <endpoint>
-                <nome>9. Adicionar Item ao Inventário</nome>
-                <metodo>POST</metodo>
-                <url>/personagens/1000/inventario/adicionar</url>
-                <body-json>
-                    <![CDATA[{"itemId": 1009, "quantidade": 10}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>11. Equipar Item</nome>
-                <metodo>POST</metodo>
-                <url>/personagens/1007/equipar/1002</url>
-                <obs>Equipa o Item 1002 no Personagem 1007.</obs>
-            </endpoint>
-            <endpoint>
-                <nome>12. Desequipar Item</nome>
-                <metodo>POST</metodo>
-                <url>/personagens/1000/desequipar/MAO_PRINCIPAL</url>
-                <obs>O slot é passado como path variable.</obs>
-            </endpoint>
-            </controller>
+| Estratégia | Pontos de Vida (HP Max) | Pontos de Mana (MP Max) | Ataque Físico |
+| :--- | :--- | :--- | :--- |
+| **Guerreiro** | $150 + (Nível \times 15)$ | $20 + (Nível \times 2)$ | $15 + (Nível \times 4)$ |
+| **Mago** | $70 + (Nível \times 6)$ | $200 + (Nível \times 20)$ | $5 + (Nível \times 1)$ |
+| **Humano** | $100 + (Nível \times 10)$ | $50 + (Nível \times 5)$ | $10 + (Nível \times 3)$ |
 
-        <controller nome="Item Controller">
-            <endpoint>
-                <nome>1. Criar Item</nome>
-                <metodo>POST</metodo>
-                <url>/itens?nome=Adaga das Sombras&tipo=ARMA&slotEquipamento=MAO_PRINCIPAL</url>
-                <body-json>
-                    <![CDATA[{"ATAQUE_FISICO": 45, "PRECISAO": 100}]]>
-                </body-json>
-                <obs>Dados principais via Query Parameters. Atributos via Body.</obs>
-            </endpoint>
-            <endpoint>
-                <nome>4. Atualizar Item</nome>
-                <metodo>PUT</metodo>
-                <url>/itens/1001</url>
-                <body-json>
-                    <![CDATA[{"nome": "Blade do Mithril +20 (Buffada)", "atributos": {"ATAQUE_FISICO": 300}}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>5. Deletar Item</nome>
-                <metodo>DELETE</metodo>
-                <url>/itens/1012</url>
-            </endpoint>
-            </controller>
+-----
 
-        <controller nome="Guilda Controller">
-            <endpoint>
-                <nome>1. Criar Guilda</nome>
-                <metodo>POST</metodo>
-                <url>/guildas</url>
-                <body-json>
-                    <![CDATA[{"nome": "Aliança Arcana", "descricao": "Apenas para magos de elite", "liderId": 1006}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>3. Convidar Personagem</nome>
-                <metodo>POST</metodo>
-                <url>/guildas/convidar</url>
-                <body-json>
-                    <![CDATA[{"convidanteId": 1003, "convidadoId": 1009}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>6. Expulsar Membro</nome>
-                <metodo>POST</metodo>
-                <url>/guildas/expulsar?guildaId=1000&expulsadorId=1000&expulsoId=1002</url>
-                <obs>Todos os IDs via Query Parameters.</obs>
-            </endpoint>
-            <endpoint>
-                <nome>7. Transferir Liderança</nome>
-                <metodo>POST</metodo>
-                <url>/guildas/transferir-lideranca</url>
-                <body-json>
-                    <![CDATA[{"guildaId": 1001, "antigoLiderId": 1003, "novoLiderId": 1004}]]>
-                </body-json>
-            </endpoint>
-            <endpoint>
-                <nome>9. Promover Membro</nome>
-                <metodo>POST</metodo>
-                <url>/guildas/1000/promover?promotorId=1000&promovidoId=1005&novoCargo=OFICIAL</url>
-                <obs>GuildaId como Path Variable. IDs e Cargo via Query Parameters.</obs>
-            </endpoint>
-            </controller>
-    </seção>
+## 🌐 Referência de Endpoints
 
-</documentação-api>
+A URL base para todos os acessos é **`http://localhost:8080/api`**.
+
+### 1\. Personagem Controller
+
+Endpoints para CRUD de Personagem e manipulação de *status* e inventário.
+
+| Método | URL | Descrição | Exemplo de Body |
+| :--- | :--- | :--- | :--- |
+| **`POST`** | `/personagens` | **Cria** um novo personagem. | `{"nome": "Kratos_God", "raca": "HUMANO", "classe": "GUERREIRO"}` |
+| **`GET`** | `/personagens` | **Lista** todos os personagens. | *N/A* |
+| **`GET`** | `/personagens/{id}` | **Busca** um personagem específico. | *N/A* |
+| **`PUT`** | `/personagens/1000` | **Atualiza** dados principais. | `{"nome": "Lord_Chaos_Renascido", "nivel": 181, "pontosVidaMax": 5000, ...}` |
+| **`DELETE`** | `/personagens/1008` | **Deleta** um personagem. | *N/A* |
+| **`POST`** | `/personagens/1000/ganhar-xp?xp=50000` | Adiciona XP ao personagem. | *N/A* |
+| **`POST`** | `/personagens/1000/inventario/adicionar` | Adiciona item ao inventário. | `{"itemId": 1009, "quantidade": 10}` |
+| **`POST`** | `/personagens/1007/equipar/1002` | **Equipa** item (1002) no personagem (1007). | *N/A* |
+| **`POST`** | `/personagens/1000/desequipar/MAO_PRINCIPAL` | **Desequipa** item de um *slot*. | *N/A* |
+
+### 2\. Item Controller
+
+Endpoints para CRUD de Itens e gestão de atributos.
+
+| Método | URL | Descrição | Exemplo de Body / Observações |
+| :--- | :--- | :--- | :--- |
+| **`POST`** | `/itens?nome=Adaga das Sombras&tipo=ARMA&slotEquipamento=MAO_PRINCIPAL` | **Cria** um novo item. | **Body:** `{"ATAQUE_FISICO": 45, "PRECISAO": 100}` (Atributos no Body, Nome/Tipo/Slot na URL) |
+| **`GET`** | `/itens` | **Lista** todos os itens. | *N/A* |
+| **`GET`** | `/itens/1001` | **Busca** um item específico. | *N/A* |
+| **`PUT`** | `/itens/1001` | **Atualiza** dados e atributos do item. | `{"nome": "Blade do Mithril +20 (Buffada)", "atributos": {"ATAQUE_FISICO": 300}}` |
+| **`DELETE`** | `/itens/1012` | **Deleta** um item. | *N/A* |
+
+### 3\. Guilda Controller
+
+Endpoints para gerenciamento de Guildas e interações entre membros (convites, cargos, etc.).
+
+| Método | URL | Descrição | Exemplo de Body / Observações |
+| :--- | :--- | :--- | :--- |
+| **`POST`** | `/guildas` | **Cria** uma nova guilda. | `{"nome": "Aliança Arcana", "liderId": 1006}` |
+| **`GET`** | `/guildas/1000` | **Busca** uma guilda específica. | *N/A* |
+| **`POST`** | `/guildas/convidar` | Envia um convite de guilda. | `{"convidanteId": 1003, "convidadoId": 1009}` |
+| **`POST`** | `/guildas/aceitar-convite` | Personagem aceita o convite. | `{"personagemId": 1005, "guildaId": 1000}` |
+| **`POST`** | `/guildas/expulsar?guildaId=1000&expulsadorId=1000&expulsoId=1002` | **Expulsa** um membro. | IDs da guilda, expulsador e expulso via *Query Parameters*. |
+| **`POST`** | `/guildas/transferir-lideranca` | **Transfere** a liderança da guilda. | `{"guildaId": 1001, "antigoLiderId": 1003, "novoLiderId": 1004}` |
+| **`PUT`** | `/guildas/1000/descricao?alteradorId=1000&novaDescricao=Guilda Dominante do Server` | **Muda** a descrição. | Nova descrição e alterador ID via *Query Parameters*. |
+| **`POST`** | `/guildas/1000/promover?promotorId=1000&promovidoId=1005&novoCargo=OFICIAL` | **Promove** um membro a um novo cargo. | IDs e cargo via *Query Parameters*. |
+
+-----
+
+Este formato deve ser renderizado corretamente no GitHub ou em qualquer visualizador Markdown, oferecendo a clareza e o detalhe que você precisa.
+
+Se precisar de qualquer ajuste ou de uma seção de "Como Começar" (Instalação/Configuração), é só me dizer\!
