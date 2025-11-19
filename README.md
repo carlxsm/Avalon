@@ -43,51 +43,55 @@ Abaixo estão alguns exemplos de como as estratégias concretas definem os *stat
 
 A URL base para todos os acessos é **`http://localhost:8080/api`**.
 
-### 1\. Personagem Controller
+## 1. Personagem Controller (Gerenciamento Principal)
 
-Endpoints para CRUD de Personagem e manipulação de *status* e inventário.
+Esta seção lista os *endpoints* para operações de CRUD de personagens, manipulação de *status* e gestão de inventário.
 
-| Método | URL | Descrição | Exemplo de Body |
+| Método | URL | Descrição | Exemplo de Body (JSON) |
 | :--- | :--- | :--- | :--- |
-| **`POST`** | `/personagens` | **Cria** um novo personagem. | `{"nome": "Kratos_God", "raca": "HUMANO", "classe": "GUERREIRO"}` |
-| **`GET`** | `/personagens` | **Lista** todos os personagens. | *N/A* |
-| **`GET`** | `/personagens/{id}` | **Busca** um personagem específico. | *N/A* |
-| **`PUT`** | `/personagens/1000` | **Atualiza** dados principais. | `{"nome": "Lord_Chaos_Renascido", "nivel": 181, "pontosVidaMax": 5000, ...}` |
-| **`DELETE`** | `/personagens/1008` | **Deleta** um personagem. | *N/A* |
-| **`POST`** | `/personagens/1000/ganhar-xp?xp=50000` | Adiciona XP ao personagem. | *N/A* |
-| **`POST`** | `/personagens/1000/inventario/adicionar` | Adiciona item ao inventário. | `{"itemId": 1009, "quantidade": 10}` |
-| **`POST`** | `/personagens/1007/equipar/1002` | **Equipa** item (1002) no personagem (1007). | *N/A* |
-| **`POST`** | `/personagens/1000/desequipar/MAO_PRINCIPAL` | **Desequipa** item de um *slot*. | *N/A* |
+| **`POST`** | `/personagens` | Cria um novo personagem. | `{"nome": "Kratos_God", "raca": "HUMANO", "classe": "GUERREIRO"}` |
+| **`GET`** | `/personagens` | Lista todos os personagens. | *N/A* |
+| **`GET`** | `/personagens/1000` | Busca um personagem pelo ID. | *N/A* |
+| **`PUT`** | `/personagens/1000` | Atualiza os atributos editáveis de um personagem. | `{"nome": "Lord_Chaos_Renascido", "nivel": 181, "experiencia": 15500000, "pontosVidaMax": 5000, ...}` |
+| **`DELETE`**| `/personagens/1008` | Deleta um personagem pelo ID. | *N/A* |
+| **`POST`** | `/personagens/1000/ganhar-xp?xp=50000` | Adiciona XP ao personagem especificado. | *N/A* |
+| **`POST`** | `/personagens/1000/receber-dano?dano=200` | Reduz os pontos de vida do personagem. | *N/A* |
+| **`POST`** | `/personagens/1002/usar-mana?mana=500` | Consome pontos de mana do personagem. | *N/A* |
+| **`POST`** | `/personagens/1000/inventario/adicionar` | Adiciona uma quantidade de um item ao inventário. | `{"itemId": 1009, "quantidade": 10}` |
+| **`POST`** | `/personagens/1000/inventario/remover` | Remove uma quantidade de um item do inventário. | `{"itemId": 1009, "quantidade": 1}` |
+| **`POST`** | `/personagens/1007/equipar/1002` | Equipa um item (1002) que está no inventário do personagem (1007). | *N/A* |
+| **`POST`** | `/personagens/1000/desequipar/MAO_PRINCIPAL` | Desequipa o item do *slot* especificado. | *N/A* |
+| **`POST`** | `/personagens/1000/logar` | Executa rotinas de verificação de *login*. | *N/A* |
 
-### 2\. Item Controller
+---
 
-Endpoints para CRUD de Itens e gestão de atributos.
+## 2. Item Controller (Catálogo de Itens)
 
-| Método | URL | Descrição | Exemplo de Body / Observações |
-| :--- | :--- | :--- | :--- |
-| **`POST`** | `/itens?nome=Adaga das Sombras&tipo=ARMA&slotEquipamento=MAO_PRINCIPAL` | **Cria** um novo item. | **Body:** `{"ATAQUE_FISICO": 45, "PRECISAO": 100}` (Atributos no Body, Nome/Tipo/Slot na URL) |
-| **`GET`** | `/itens` | **Lista** todos os itens. | *N/A* |
-| **`GET`** | `/itens/1001` | **Busca** um item específico. | *N/A* |
-| **`PUT`** | `/itens/1001` | **Atualiza** dados e atributos do item. | `{"nome": "Blade do Mithril +20 (Buffada)", "atributos": {"ATAQUE_FISICO": 300}}` |
-| **`DELETE`** | `/itens/1012` | **Deleta** um item. | *N/A* |
+Endpoints para operações de CRUD de itens no catálogo do jogo.
 
-### 3\. Guilda Controller
+| Método | URL | Descrição | Exemplo de Body (JSON) | Observações |
+| :--- | :--- | :--- | :--- | :--- |
+| **`POST`** | `/itens?nome=Adaga das Sombras&tipo=ARMA&slotEquipamento=MAO_PRINCIPAL` | Cria um novo item. | `{"ATAQUE_FISICO": 45, "PRECISAO": 100}` | Dados básicos via Query Params; Atributos via Body. |
+| **`GET`** | `/itens` | Lista todos os itens. | *N/A* | *N/A* |
+| **`GET`** | `/itens/1001` | Busca um item pelo ID. | *N/A* | *N/A* |
+| **`PUT`** | `/itens/1001` | Atualiza o item especificado. | `{"nome": "Blade do Mithril +20 (Buffada)", "atributos": {"ATAQUE_FISICO": 300}}` | *N/A* |
+| **`DELETE`**| `/itens/1012` | Deleta um item pelo ID. | *N/A* | *N/A* |
 
-Endpoints para gerenciamento de Guildas e interações entre membros (convites, cargos, etc.).
+---
 
-| Método | URL | Descrição | Exemplo de Body / Observações |
-| :--- | :--- | :--- | :--- |
-| **`POST`** | `/guildas` | **Cria** uma nova guilda. | `{"nome": "Aliança Arcana", "liderId": 1006}` |
-| **`GET`** | `/guildas/1000` | **Busca** uma guilda específica. | *N/A* |
-| **`POST`** | `/guildas/convidar` | Envia um convite de guilda. | `{"convidanteId": 1003, "convidadoId": 1009}` |
-| **`POST`** | `/guildas/aceitar-convite` | Personagem aceita o convite. | `{"personagemId": 1005, "guildaId": 1000}` |
-| **`POST`** | `/guildas/expulsar?guildaId=1000&expulsadorId=1000&expulsoId=1002` | **Expulsa** um membro. | IDs da guilda, expulsador e expulso via *Query Parameters*. |
-| **`POST`** | `/guildas/transferir-lideranca` | **Transfere** a liderança da guilda. | `{"guildaId": 1001, "antigoLiderId": 1003, "novoLiderId": 1004}` |
-| **`PUT`** | `/guildas/1000/descricao?alteradorId=1000&novaDescricao=Guilda Dominante do Server` | **Muda** a descrição. | Nova descrição e alterador ID via *Query Parameters*. |
-| **`POST`** | `/guildas/1000/promover?promotorId=1000&promovidoId=1005&novoCargo=OFICIAL` | **Promove** um membro a um novo cargo. | IDs e cargo via *Query Parameters*. |
+## 3. Guilda Controller (Organização Social)
 
------
+Endpoints para gerenciamento de guildas e interações sociais entre personagens.
 
-Este formato deve ser renderizado corretamente no GitHub ou em qualquer visualizador Markdown, oferecendo a clareza e o detalhe que você precisa.
+| Método | URL | Descrição | Exemplo de Body (JSON) | Observações |
+| :--- | :--- | :--- | :--- | :--- |
+| **`POST`** | `/guildas` | Cria uma nova guilda. | `{"nome": "Aliança Arcana", "descricao": "Apenas para magos de elite", "liderId": 1006}` | *N/A* |
+| **`GET`** | `/guildas/1000` | Busca uma guilda pelo ID. | *N/A* | *N/A* |
+| **`POST`** | `/guildas/convidar` | Envia um convite de guilda. | `{"convidanteId": 1003, "convidadoId": 1009}` | *N/A* |
+| **`POST`** | `/guildas/aceitar-convite` | Personagem aceita o convite. | `{"personagemId": 1005, "guildaId": 1000}` | *N/A* |
+| **`POST`** | `/guildas/recusar-convite` | Personagem recusa o convite. | `{"personagemId": 1007, "guildaId": 1000}` | *N/A* |
+| **`POST`** | `/guildas/expulsar?guildaId=1000&expulsadorId=1000&expulsoId=1002` | Expulsa um membro da guilda. | *N/A* | IDs via Query Params. |
+| **`POST`** | `/guildas/transferir-lideranca` | Transfere a liderança da guilda para outro membro. | `{"guildaId": 1001, "antigoLiderId": 1003, "novoLiderId": 1004}` | *N/A* |
+| **`PUT`** | `/guildas/1000/descricao?alteradorId=1000&novaDescricao=Guilda Dominante do Server` | Altera a descrição da guilda. | *N/A* | ID do alterador e nova descrição via Query Params. |
+| **`POST`** | `/guildas/1000/promover?promotorId=1000&promovidoId=1005&novoCargo=OFICIAL` | Promove/Demove um membro para um novo cargo. | *N/A* | IDs e cargo via Query Params. |
 
-Se precisar de qualquer ajuste ou de uma seção de "Como Começar" (Instalação/Configuração), é só me dizer\!
