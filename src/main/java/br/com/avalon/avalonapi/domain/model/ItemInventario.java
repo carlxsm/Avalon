@@ -2,8 +2,6 @@ package br.com.avalon.avalonapi.domain.model;
 
 import jakarta.persistence.*;
 
-import javax.persistence.*;
-
 @Entity
 public class ItemInventario {
 
@@ -13,7 +11,7 @@ public class ItemInventario {
 
     @ManyToOne
     @JoinColumn(name = "item_id")
-    private Item item;
+    private Itens item;
     private int quantidade;
 
     @ManyToOne // Relacionamento com Inventário
@@ -22,7 +20,7 @@ public class ItemInventario {
 
     public ItemInventario() {} // Construtor padrão para JPA
 
-    public ItemInventario(Item item, int quantidade) {
+    public ItemInventario(Itens item, int quantidade) {
         this.item = item;
         this.quantidade = quantidade;
     }
@@ -30,8 +28,8 @@ public class ItemInventario {
     // Getters e setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
-    public Item getItem() { return item; }
-    public void setItem(Item item) { this.item = item; }
+    public Itens getItem() { return item; }
+    public void setItem(Itens item) { this.item = item; }
     public int getQuantidade() { return quantidade; }
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
     public Inventario getInventario() { return inventario; }

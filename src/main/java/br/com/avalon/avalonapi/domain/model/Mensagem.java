@@ -3,8 +3,6 @@ package br.com.avalon.avalonapi.domain.model;
 import br.com.avalon.avalonapi.domain.enums.TipoMensagem;
 import jakarta.persistence.*;
 
-import javax.persistence.*;
-
 @Entity
 public class Mensagem {
 

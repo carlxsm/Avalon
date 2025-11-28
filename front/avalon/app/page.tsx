@@ -44,8 +44,8 @@ export default function Home() {
         </nav>
 
         <div className="auth">
-            <a className="login" href="#">Login</a>
-            <a className="cadastro" href="#">Cadastrar</a>
+            <a className="login" href="/auth?mode=login">Login</a>
+            <a className="cadastro" href="/auth?mode=register">Cadastrar</a>
         </div>
     </header>
 
@@ -230,14 +230,14 @@ export default function Home() {
             <p>Junte-se a milhares de jogadores e forje sua lenda. Crie seu personagem agora e comece sua jornada épica gratuitamente.</p>
 
             <div className="cta-buttons">
-                <a className="btn-primary-cta" href="#">
+                <a className="btn-primary-cta" href="/auth?mode=register">
                     <span>Criar Conta Grátis</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <line x1="5" y1="12" x2="19" y2="12"></line>
                         <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                 </a>
-                <a className="btn-secondary-cta" href="#">Fazer Login</a>
+                <a className="btn-secondary-cta" href="/auth?mode=login">Fazer Login</a>
             </div>
         </div>
     </section>

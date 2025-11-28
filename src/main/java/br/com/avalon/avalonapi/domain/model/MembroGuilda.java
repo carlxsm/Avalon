@@ -1,10 +1,8 @@
 package br.com.avalon.avalonapi.domain.model;
 
 import br.com.avalon.avalonapi.domain.enums.CargoGuilda;
-import br.com.avalon.avalonapi.domain.model.Guilda;
 import jakarta.persistence.*;
 
-import javax.persistence.*;
 
 @Entity
 public class MembroGuilda {

@@ -3,7 +3,7 @@ package br.com.avalon.avalonapi.service;
 import br.com.avalon.avalonapi.domain.enums.Atributo;
 import br.com.avalon.avalonapi.domain.enums.SlotEquipamento;
 import br.com.avalon.avalonapi.domain.enums.TipoItem;
-import br.com.avalon.avalonapi.domain.model.Item;
+import br.com.avalon.avalonapi.domain.model.Itens;
 import br.com.avalon.avalonapi.repository.ItemRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,21 +22,21 @@ public class ItemService {
     }
 
     @Transactional
-    public Item criarItem(String nome, TipoItem tipo, Map<Atributo, Integer> atributos, SlotEquipamento slotEquipamento) {
-        Item item = new Item(nome, tipo, atributos, slotEquipamento);
+    public Itens criarItem(String nome, TipoItem tipo, Map<Atributo, Integer> atributos, SlotEquipamento slotEquipamento) {
+        Itens item = new Itens(nome, tipo, atributos, slotEquipamento);
         return itemRepository.save(item);
     }
 
-    public Optional<Item> buscarItemPorId(Long id) {
+    public Optional<Itens> buscarItemPorId(Long id) {
         return itemRepository.findById(id);
     }
 
-    public List<Item> buscarTodosItens() {
+    public List<Itens> buscarTodosItens() {
         return itemRepository.findAll();
     }
 
     @Transactional
-    public Item atualizarItem(Long id, Item itemAtualizado) {
+    public Itens atualizarItem(Long id, Itens itemAtualizado) {
         return itemRepository.findById(id)
                 .map(item -> {
                     item.setNome(itemAtualizado.getNome());

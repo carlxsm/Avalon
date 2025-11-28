@@ -13,4 +13,7 @@ public class EstrategiaStatusElfo implements EstrategiaStatus {
     public int getPrecisaoBase(int nivel) { return 7 + nivel * 2; }
     @Override
     public int getDestrezaBase(int nivel) { return 9 + nivel * 3; }
+
+    @Override public int getPontosVidaBase(int nivel) { return 80 + (nivel * 8); }
+    @Override public int getPontosManaBase(int nivel) { return 100 + (nivel * 10); }
 }

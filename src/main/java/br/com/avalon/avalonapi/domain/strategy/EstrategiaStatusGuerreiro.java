@@ -13,4 +13,7 @@ public class EstrategiaStatusGuerreiro implements EstrategiaStatus {
     public int getPrecisaoBase(int nivel) { return 8 + nivel * 2; }
     @Override
     public int getDestrezaBase(int nivel) { return 6 + nivel * 1; }
+
+    @Override public int getPontosVidaBase(int nivel) { return 150 + (nivel * 15); }
+    @Override public int getPontosManaBase(int nivel) { return 20 + (nivel * 2); }
 }

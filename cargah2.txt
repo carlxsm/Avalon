@@ -1,0 +1,180 @@
+-- #######################################################################
+-- #                            LIMPEZA INICIAL                            #
+-- #######################################################################
+DELETE FROM personagem_itens_equipados;
+DELETE FROM membro_guilda;
+DELETE FROM guilda_convites_pendentes;
+DELETE FROM item_inventario;
+DELETE FROM item_atributos;
+DELETE FROM inventario;
+DELETE FROM mensagem;
+DELETE FROM personagem;
+DELETE FROM guilda;
+DELETE FROM itens;
+
+-- #######################################################################
+-- #                          1. INSERÇÃO DE ITENS                         #
+-- #######################################################################
+-- Tabela: itens (id, nome, tipo, slot_equipamento)
+-- Tipos: ARMA, ARMADURA_LEVE, ARMADURA_MEDIA, ARMADURA_PESADA, POCAO, EQUIPAMENTO
+-- Slots: MAO_PRINCIPAL, PEITO, CABECA, COLAR, ANEL1, ANEL2
+
+INSERT INTO itens (id, nome, tipo, slot_equipamento) VALUES
+-- Itens de Cabal (Armas/Armaduras)
+(1001, 'Blade do Mithril +8', 'ARMA', 'MAO_PRINCIPAL'), -- Guerreiro
+(1002, 'Katana do Mithril +8', 'ARMA', 'MAO_PRINCIPAL'), -- Guerreiro
+(1003, 'Armadura do Mitril', 'ARMADURA_PESADA', 'PEITO'), -- Guerreiro/FS
+(1004, 'Arma Orbital do Mithril', 'ARMA', 'MAO_PRINCIPAL'), -- Guerreiro Arcano
+(1005, 'Traje do Sieghart (B.O.D)', 'ARMADURA_LEVE', 'PEITO'), -- Arqueiro/Duelista
+(1006, 'Greatsword do Adamantium', 'ARMA', 'MAO_PRINCIPAL'), -- Guerreiro
+(1007, 'Orbe do Aço', 'ARMA', 'MAO_PRINCIPAL'), -- Mago
+(1008, 'Casco de Mitril de Batalha', 'ARMADURA_MEDIA', 'CABECA'), -- Guerreiro Arcano
+(1009, 'Poção de HP Grande', 'POCAO', NULL), -- Consumível
+(1010, 'Poção de MP Grande', 'POCAO', NULL), -- Consumível
+(1011, 'Anel de Sábio +3', 'EQUIPAMENTO', 'ANEL1'), -- Acessório
+(1012, 'Colar da Dor', 'EQUIPAMENTO', 'COLAR'); -- Acessório
+
+-- #######################################################################
+-- #                       2. ATRIBUTOS DOS ITENS                          #
+-- #######################################################################
+-- Tabela: item_atributos (item_id, valor, atributo_nome)
+-- Atributos: ATAQUE_FISICO, ATAQUE_MAGICO, DEFESA_FISICA, DEFESA_MAGICA, VIDA_MAXIMA, MANA_MAXIMA, PRECISAO
+
+INSERT INTO item_atributos (item_id, valor, atributo_nome) VALUES
+(1001, 120, 'ATAQUE_FISICO'), (1001, 15, 'PRECISAO'), -- Blade
+(1003, 90, 'DEFESA_FISICA'), (1003, 10, 'DEFESA_MAGICA'), -- Armadura
+(1004, 110, 'ATAQUE_FISICO'), (1004, 50, 'ATAQUE_MAGICO'), -- Arma Orbital
+(1005, 50, 'DEFESA_FISICA'), (1005, 5, 'DESTREZA'), -- Traje
+(1007, 10, 'ATAQUE_FISICO'), (1007, 130, 'ATAQUE_MAGICO'), -- Orbe
+(1009, 1000, 'PONTOS_VIDA_BASE'), -- Poção de HP
+(1010, 800, 'PONTOS_MANA_BASE'), -- Poção de MP
+(1011, 20, 'DESTREZA'), (1011, 5, 'VIDA_MAXIMA'), -- Anel
+(1012, 10, 'ATAQUE_FISICO'), (1012, 10, 'ATAQUE_MAGICO'); -- Colar
+
+-- #######################################################################
+-- #                        3. INSERÇÃO DE PERSONAGENS                     #
+-- #######################################################################
+-- Tabela: personagem (id, nome, raca, classe, nivel, experiencia, pv_atual, pv_max, pm_atual, pm_max, guilda_id)
+-- Raças: HUMANO, ELFO, ANAO
+-- Classes: GUERREIRO, ARQUEIRO, MAGO
+
+INSERT INTO personagem (id, nome, raca, classe, nivel, experiencia, pontos_vida_atual, pontos_vida_max, pontos_mana_atual, pontos_mana_max, guilda_id) VALUES
+-- Membros da Guilda Principal (ID 1000)
+(1000, 'Lord_Chaos', 'HUMANO', 'GUERREIRO', 180, 15000000, 5000, 5000, 1200, 1200, NULL), -- LIDER (ID 1000)
+(1001, 'Elora_Blade', 'ELFO', 'ARQUEIRO', 170, 12000000, 4500, 4500, 1000, 1000, NULL), -- OFICIAL (ID 1001)
+(1002, 'Mystic_Rage', 'HUMANO', 'MAGO', 165, 11000000, 3800, 3800, 3500, 3500, NULL), -- MEMBRO (ID 1002)
+-- Membros da Segunda Guilda (ID 1001)
+(1003, 'Dwarf_Tank', 'ANAO', 'GUERREIRO', 150, 8000000, 6000, 6000, 800, 800, NULL), -- LIDER (ID 1003)
+(1004, 'Wind_Strike', 'ELFO', 'ARQUEIRO', 145, 7500000, 4000, 4000, 1500, 1500, NULL), -- MEMBRO (ID 1004)
+-- Personagens Sem Guilda
+(1005, 'Solo_Hunter', 'HUMANO', 'GUERREIRO', 130, 6000000, 3500, 3500, 700, 700, NULL),
+(1006, 'Magic_Wisp', 'ELFO', 'MAGO', 125, 5500000, 2800, 2800, 2500, 2500, NULL),
+(1007, 'Newbie_Sam', 'HUMANO', 'GUERREIRO', 10, 50000, 500, 500, 100, 100, NULL),
+(1008, 'Arcane_Fury', 'HUMANO', 'MAGO', 50, 800000, 1500, 1500, 1800, 1800, NULL),
+(1009, 'Iron_Wall', 'ANAO', 'GUERREIRO', 90, 3000000, 4800, 4800, 600, 600, NULL);
+
+-- #######################################################################
+-- #                            4. INVENTÁRIOS                           #
+-- #######################################################################
+-- Tabela: inventario (id, capacidade_maxima)
+-- Capacidade máxima padrão de 50 slots
+
+INSERT INTO inventario (id, capacidade_maxima) VALUES
+(1000, 50), (1001, 50), (1002, 50), (1003, 50), (1004, 50),
+(1005, 50), (1006, 50), (1007, 50), (1008, 50), (1009, 50);
+
+-- Atualizar referência no personagem (personagem_id para inventario_id)
+UPDATE personagem SET inventario_id = 1000 WHERE id = 1000;
+UPDATE personagem SET inventario_id = 1001 WHERE id = 1001;
+UPDATE personagem SET inventario_id = 1002 WHERE id = 1002;
+UPDATE personagem SET inventario_id = 1003 WHERE id = 1003;
+UPDATE personagem SET inventario_id = 1004 WHERE id = 1004;
+UPDATE personagem SET inventario_id = 1005 WHERE id = 1005;
+UPDATE personagem SET inventario_id = 1006 WHERE id = 1006;
+UPDATE personagem SET inventario_id = 1007 WHERE id = 1007;
+UPDATE personagem SET inventario_id = 1008 WHERE id = 1008;
+UPDATE personagem SET inventario_id = 1009 WHERE id = 1009;
+
+-- #######################################################################
+-- #                     5. ITENS NO INVENTÁRIO (ITEM_INVENTARIO)          #
+-- #######################################################################
+-- Tabela: item_inventario (inventario_id, item_id, quantidade)
+
+-- Lord_Chaos (ID 1000)
+INSERT INTO item_inventario (inventario_id, item_id, quantidade) VALUES
+(1000, 1001, 1),  -- Blade do Mithril
+(1000, 1003, 1),  -- Armadura do Mitril
+(1000, 1009, 50), -- Poção de HP
+(1000, 1011, 2);  -- Anel de Sábio +3 (2x)
+
+-- Elora_Blade (ID 1001)
+INSERT INTO item_inventario (inventario_id, item_id, quantidade) VALUES
+(1001, 1005, 1),  -- Traje Sieghart
+(1001, 1010, 30); -- Poção de MP
+
+-- Newbie_Sam (ID 1007)
+INSERT INTO item_inventario (inventario_id, item_id, quantidade) VALUES
+(1007, 1002, 1); -- Katana do Mithril
+
+-- #######################################################################
+-- #                           6. CRIAÇÃO DE GUILDAS                       #
+-- #######################################################################
+-- Tabela: guilda (id, nome, descricao, lider_id)
+
+INSERT INTO guilda (id, nome, descricao, lider_id) VALUES
+(1000, 'Os Campeões', 'A Guilda mais forte e antiga de Nevareth.', 1000),
+(1001, 'Caminho da Magia', 'Focada em artefatos e magia arcana.', 1003);
+
+-- Atualizar Personagens para pertencerem às guildas
+UPDATE personagem SET guilda_id = 1000 WHERE id IN (1000, 1001, 1002);
+UPDATE personagem SET guilda_id = 1001 WHERE id IN (1003, 1004);
+
+-- #######################################################################
+-- #                    7. MEMBROS DA GUILDA (MEMBRO_GUILDA)               #
+-- #######################################################################
+-- Tabela: membro_guilda (guilda_id, personagem_id, cargo)
+-- Cargos: LIDER, OFICIAL, MEMBRO
+
+-- Guilda 'Os Campeões' (ID 1000)
+INSERT INTO membro_guilda (guilda_id, personagem_id, cargo) VALUES
+(1000, 1000, 'LIDER'),
+(1000, 1001, 'OFICIAL'),
+(1000, 1002, 'MEMBRO');
+
+-- Guilda 'Caminho da Magia' (ID 1001)
+INSERT INTO membro_guilda (guilda_id, personagem_id, cargo) VALUES
+(1001, 1003, 'LIDER'),
+(1001, 1004, 'MEMBRO');
+
+-- #######################################################################
+-- #                      8. CONVITES PENDENTES (Exemplo)                #
+-- #######################################################################
+-- Guilda 1000 convidou o Solo_Hunter (1005)
+
+INSERT INTO guilda_convites_pendentes (guilda_id, personagem_id, convite_enviado) VALUES
+(1000, 1005, TRUE);
+
+-- #######################################################################
+-- #                    9. ITENS EQUIPADOS (Exemplo)                     #
+-- #######################################################################
+-- Tabela: personagem_itens_equipados (personagem_id, slot_equipamento, itens_equipados_id)
+
+-- Lord_Chaos (1000) equipa Blade (1001) e Armadura (1003)
+INSERT INTO personagem_itens_equipados (personagem_id, slot_equipamento, itens_equipados_id) VALUES
+(1000, 'MAO_PRINCIPAL', 1001),
+(1000, 'PEITO', 1003);
+
+-- Elora_Blade (1001) equipa Traje (1005)
+INSERT INTO personagem_itens_equipados (personagem_id, slot_equipamento, itens_equipados_id) VALUES
+(1001, 'PEITO', 1005);
+
+-- #######################################################################
+-- #               10. AJUSTE DE SEQUÊNCIAS (Para H2 em modo AUTO)        #
+-- #######################################################################
+
+SELECT MAX(id) + 1 FROM itens;
+ALTER SEQUENCE itens_seq RESTART WITH 1013;
+ALTER SEQUENCE personagem_seq RESTART WITH 1010;
+ALTER SEQUENCE guilda_seq RESTART WITH 1002;
+ALTER SEQUENCE inventario_seq RESTART WITH 1010;
+ALTER SEQUENCE item_inventario_seq RESTART WITH 100;

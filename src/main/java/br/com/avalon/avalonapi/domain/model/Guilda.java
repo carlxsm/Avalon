@@ -3,7 +3,6 @@ package br.com.avalon.avalonapi.domain.model;
 import br.com.avalon.avalonapi.domain.enums.CargoGuilda;
 import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

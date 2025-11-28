@@ -2,7 +2,6 @@ package br.com.avalon.avalonapi.domain.model;
 
 import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +38,7 @@ public class Inventario {
     public int getCapacidadeMaxima() { return capacidadeMaxima; }
 
 
-    public boolean adicionarItem(Item item, int quantidade) {
+    public boolean adicionarItem(Itens item, int quantidade) {
         if (quantidade <= 0) return false;
 
         Optional<ItemInventario> existingItem = itens.stream()
@@ -58,7 +57,7 @@ public class Inventario {
         return false; // Inventário cheio
     }
 
-    public boolean removerItem(Item item, int quantidade) {
+    public boolean removerItem(Itens item, int quantidade) {
         if (quantidade <= 0) return false;
 
         Optional<ItemInventario> existingItem = itens.stream()

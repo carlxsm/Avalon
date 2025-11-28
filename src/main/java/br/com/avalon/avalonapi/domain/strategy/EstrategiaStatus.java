@@ -8,5 +8,10 @@ public interface EstrategiaStatus {
     int getDefesaFisicaBase(int nivel);
     int getPrecisaoBase(int nivel);
     int getDestrezaBase(int nivel);
+
+    int getPontosVidaBase(int nivel);
+    int getPontosManaBase(int nivel);
 }
+
+
 // Enum Raca
