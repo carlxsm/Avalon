@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   User,
   Users,
@@ -15,7 +16,34 @@ import {
 } from "react-feather";
 
 export default function GuildRanking() {
+  interface Guilda{
+    id: number;
+    nome: string;
+    descricao: string;
+    liderId: number;
+    membros: any;
+
+  }
+const [guildas, setGuildas] = useState<Guilda[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch("http://localhost:8080/api/guildas")
+      .then((res) => {
+        if (!res.ok) throw new Error("Erro ao buscar personagens");
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data)
+        setGuildas(data);
+      })
+      .catch((err) => {
+        console.error("Erro no GET:", err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
+    <div className="guild-geral">
     <div className="dashboard-body">
       <nav className="dash-navbar">
         <div className="dash-logo">
@@ -86,13 +114,20 @@ export default function GuildRanking() {
           <p className="page-subtitle">
             As facções mais poderosas de Avalon em tempo real.
           </p>
+        </div>
 
           {/* LISTA DE GUILDAS */}
           <div className="guild-list">
-
-            {/* 1° */}
-            <div className="guild-card">
-              <span className="guild-rank rank-1">#1</span>
+            {loading ? (
+              <p>Carregando guildas...</p>
+            ) : guildas.length === 0 ? (
+              <p>Nenhuma guilda encontrada!</p>
+            ) : (
+            <>
+            {guildas.map((g, index) => {
+              return (
+              <div className="guild-card">
+              <span className="guild-rank rank-1">{index + 1}</span>
 
               <div className="guild-info">
                 <div className="guild-icon">
@@ -100,81 +135,21 @@ export default function GuildRanking() {
                 </div>
 
                 <div className="guild-details">
-                  <h3>Os Filhos do Dragão</h3>
-                  <p>Líder: Lord Kael</p>
-                  <span className="guild-motto">"O fogo nos guia."</span>
+                  <h3>{g.nome}</h3>
+                  <p>Líder: {g.liderId}</p>
+                  <span className="guild-motto">{g.descricao}</span>
                 </div>
               </div>
 
-              <div className="guild-stats">
-                <p>
-                  Membros: <span>98/100</span>
-                </p>
-                <p>
-                  Poder: <span>1,200,500</span>
-                </p>
-              </div>
+              
 
               <button className="btn-view-guild">Ver Detalhes</button>
-            </div>
-
-            {/* 2° */}
-            <div className="guild-card">
-              <span className="guild-rank rank-2">#2</span>
-
-              <div className="guild-info">
-                <div className="guild-icon">
-                  <Feather color="silver" />
-                </div>
-
-                <div className="guild-details">
-                  <h3>Fênix Negra</h3>
-                  <p>Líder: Lady Elara</p>
-                  <span className="guild-motto">"Renasceremos das cinzas."</span>
-                </div>
-              </div>
-
-              <div className="guild-stats">
-                <p>
-                  Membros: <span>85/100</span>
-                </p>
-                <p>
-                  Poder: <span>980,320</span>
-                </p>
-              </div>
-
-              <button className="btn-view-guild">Ver Detalhes</button>
-            </div>
-
-            {/* 3° */}
-            <div className="guild-card">
-              <span className="guild-rank rank-3">#3</span>
-
-              <div className="guild-info">
-                <div className="guild-icon">
-                  <Anchor color="#cd7f32" />
-                </div>
-
-                <div className="guild-details">
-                  <h3>Legião de Ferro</h3>
-                  <p>Líder: Comandante Vex</p>
-                  <span className="guild-motto">"Nossa força é inquebrável."</span>
-                </div>
-              </div>
-
-              <div className="guild-stats">
-                <p>
-                  Membros: <span>90/100</span>
-                </p>
-                <p>
-                  Poder: <span>750,110</span>
-                </p>
-              </div>
-
-              <button className="btn-view-guild">Ver Detalhes</button>
-            </div>
-
           </div>
+            )})}
+            </>
+            )}
+            </div>
+            {/* 1° */}
 
           {/* PAGINAÇÃO */}
           <div className="pagination-controls">
@@ -187,8 +162,8 @@ export default function GuildRanking() {
           <a href="#" className="btn-dashboard-guild create-guild">
             <PlusCircle /> Crie Sua Própria Guilda
           </a>
-        </div>
       </main>
+        </div>
     </div>
   );
 }

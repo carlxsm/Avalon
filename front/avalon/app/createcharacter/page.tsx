@@ -1,5 +1,5 @@
 "use client";
-
+import { FormEvent } from 'react'
 import { useState } from "react";
 import { User } from "react-feather";
 
@@ -16,7 +16,7 @@ export default function CreateCharacterPage() {
     setMessage("");
 
     try {
-      const response = await fetch("http://localhost:8080/personagens", {
+      const response = await fetch("http://localhost:8080/api/personagens", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,12 +27,43 @@ export default function CreateCharacterPage() {
       if (!response.ok) throw new Error("Erro ao criar personagem");
 
       setMessage("✅ Personagem criado com sucesso!");
-      setNome("");
-      setRaca("HUMANO");
-      setClasse("GUERREIRO");
+      setNome(nome);
+      setRaca(raca);
+      setClasse(classe);
     } catch (err: any) {
-      setMessage("❌ Erro ao criar personagem.");
+      setMessage("❌ Erro ao criar personagem. " + err);
     } finally {
+      setLoading(false);
+    }
+  }
+ const [error, setError] = useState<string | null>(null)
+   async function onSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true);
+
+    try{
+    const response = await fetch('http://localhost:8080/api/personagens', {
+      method: 'POST',
+      headers: {
+         "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        nome,
+        raca,
+        classe
+      }),
+    })
+        if (!response.ok) {
+        throw new Error('Failed to submit the data. Please try again.')
+      } 
+      // Handle response if necessary
+      const data = await response.json()
+      console.log(response.json)
+      setMessage("Personagem criado com sucesso.")
+    } catch (error: any) {
+      setMessage(error.message)
+      console.error(error)
+    } finally{
       setLoading(false);
     }
   }
@@ -112,12 +143,13 @@ export default function CreateCharacterPage() {
             Preencha as informações abaixo para criar o seu herói em <span className="highlight-text">Avalon</span>.
           </p>
 
-          <form onSubmit={handleCreate} className="create-form">
+          <form onSubmit={onSubmit} className="create-form">
 
             <div className="form-group">
               <label>Nome do Personagem</label>
               <input
                 type="text"
+                name="name"
                 placeholder="Ex: Kratos_God"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
@@ -127,7 +159,7 @@ export default function CreateCharacterPage() {
 
             <div className="form-group">
               <label>Raça</label>
-              <select value={raca} onChange={(e) => setRaca(e.target.value)}>
+              <select name='raça' value={raca} onChange={(e) => setRaca(e.target.value)}>
                 <option value="HUMANO">Humano</option>
                 <option value="ELFO">Elfo</option>
                 <option value="ANÃO">Anão</option>
@@ -137,7 +169,7 @@ export default function CreateCharacterPage() {
 
             <div className="form-group">
               <label>Classe</label>
-              <select value={classe} onChange={(e) => setClasse(e.target.value)}>
+              <select value={classe} name="classe" onChange={(e) => setClasse(e.target.value)}>
                 <option value="GUERREIRO">Guerreiro</option>
                 <option value="MAGO">Mago</option>
                 <option value="ARQUEIRO">Arqueiro</option>
@@ -145,7 +177,7 @@ export default function CreateCharacterPage() {
               </select>
             </div>
 
-            <button className="btn-dashboard-primary" disabled={loading}>
+            <button type='submit' className="btn-dashboard-primary" disabled={loading}>
               {loading ? "Criando..." : "Criar Personagem"}
             </button>
 
@@ -155,4 +187,4 @@ export default function CreateCharacterPage() {
       </main>
     </div>
   );
-}
+   }

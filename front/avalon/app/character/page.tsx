@@ -1,10 +1,43 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { User } from "react-feather";
+import Image from "next/image";
 
+
+import Link from "next/link";
 export default function CharacterPage() {
-  
+  interface Personagem{
+    id: number;
+    nome: string;
+    raca: string;
+    classe: string;
+    nivel: number;
+    experiencia: number;
+    pontosVidaAtual: number;
+    pontosVidaMax: number;
+    pontosManaAtual: number;
+    pontosManaMax: number;
+    inventario: any;
+    guilda: number;
+  }
+  const [personagens, setPersonagens] = useState<Personagem[]>([]);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch("http://localhost:8080/api/personagens")
+      .then((res) => {
+        if (!res.ok) throw new Error("Erro ao buscar personagens");
+        return res.json();
+      })
+      .then((data) => {
+        setPersonagens(data);
+      })
+      .catch((err) => {
+        console.error("Erro no GET:", err);
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
 
   return (
     <div className="dashboard-body">
@@ -28,7 +61,7 @@ export default function CharacterPage() {
             </defs>
           </svg>
 
-          <span className="logo-text">Avalon</span>
+          <a className="logo-text dash-link" href="">Avalon</a>
         </div>
 
         <div className="dash-menu">
@@ -68,126 +101,98 @@ export default function CharacterPage() {
           </a>
         </div>
       </nav>
-
       {/* MAIN CONTENT */}
+          <div id="criarPerso">
+            <Link className="btn-dashboard-primary" href="/createcharacter">
+              Criar personagem!
+              </Link>
+          </div>
       <main className="dashboard-content">
-        <div className="particles"></div>
 
         <div className="content-wrapper max-width-1000">
           <h1 className="page-title">
             <i data-feather="shield"></i> A Ficha do seu Herói
           </h1>
+          {loading ? (
+            <p>Carregando personagens...</p>
+          ) : personagens.length === 0 ? (
+            <p>Nenhum personagem encontrado.</p>
+          ) : (
+            <>
+                          <p className="page-subtitle">
+                Estatísticas, equipamentos e a história de{" "}
+                <span className="highlight-text">
+                  {personagens[0].nome}
+                </span>.
+              </p>
 
-          <p className="page-subtitle">
-            Estatísticas, equipamentos e a história de{" "}
-            <span className="highlight-text">Sir Galahad</span>.
-          </p>
+              <div className="character-sheet-container">
+                {/* HEADER dinâmico */}
+                <div className="character-sheet-header">
+                  
+                  <Image 
+      
+                  src="/teste.png" 
+                  alt="Imagem do Personagem" 
+                  className="character-avatar"
+                  width={500}
+                  height={500}
+                  />
 
-          <div className="character-sheet-container">
-            {/* HEADER */}
-            <div className="character-sheet-header">
-              <img
-                src="/guerreiro.jpg"
-                alt="Imagem do Personagem"
-                className="character-avatar"
-              />
-
-              <div className="header-details">
-                <h2>Sir Galahad, O Inabalável</h2>
-                <span className="char-level">Nível 42</span>
-                <p className="char-class">Classe: Paladino Sagrado</p>
-                <p className="char-guild">Guilda: Os Filhos do Dragão</p>
-              </div>
-
-              <div className="header-actions">
-                <button className="btn-dashboard-primary">
-                  <i data-feather="edit-3"></i> Editar Ficha
-                </button>
-
-                <button className="btn-dashboard-guild">
-                  <i data-feather="aperture"></i> Ver Inventário
-                </button>
-              </div>
-            </div>
-
-            {/* GRID DE STATUS */}
-            <div className="character-stats-grid">
-              <div className="stat-block stat-hp">
-                <i data-feather="heart"></i>
-                <h4>HP (Vida)</h4>
-                <span className="stat-value">4500 / 4500</span>
-                <div className="stat-bar">
-                  <div style={{ width: "100%" }}></div>
-                </div>
-              </div>
-
-              <div className="stat-block stat-mana">
-                <i data-feather="droplet"></i>
-                <h4>MP (Mana)</h4>
-                <span className="stat-value">1200 / 1500</span>
-                <div className="stat-bar">
-                  <div style={{ width: "80%", background: "#007bff" }}></div>
-                </div>
-              </div>
-
-              <div className="stat-block stat-attack">
-                <i data-feather="activity"></i>
-                <h4>Ataque</h4>
-                <span className="stat-value">345</span>
-              </div>
-
-              <div className="stat-block stat-defense">
-                <i data-feather="lock"></i>
-                <h4>Defesa</h4>
-                <span className="stat-value">280</span>
-              </div>
-
-              <div className="stat-block stat-crit">
-                <i data-feather="crosshair"></i>
-                <h4>Chance Crítica</h4>
-                <span className="stat-value">25%</span>
-              </div>
-
-              <div className="stat-block stat-speed">
-                <i data-feather="zap"></i>
-                <h4>Velocidade</h4>
-                <span className="stat-value">12.5</span>
-              </div>
-            </div>
-
-            {/* EQUIPAMENTOS */}
-            <div className="char-equipment">
-              <h3>Equipamento Atual</h3>
-
-              <div className="equipment-slots">
-                <div className="slot">
-                  <i data-feather="pocket"></i>
-                  <span className="slot-name">Arma Principal</span>
-                  <span className="slot-item item-legendary">
-                    Espada do Rei Arthur +5
-                  </span>
+                  <div className="header-details">
+                    <h2>{personagens[0].nome}</h2>
+                    <span className="char-level">
+                      Nível {personagens[0].nivel}
+                    </span>
+                    <p className="char-class">Classe: {personagens[0].classe}</p>
+                  </div>
                 </div>
 
-                <div className="slot">
-                  <i data-feather="shield"></i>
-                  <span className="slot-name">Armadura</span>
-                  <span className="slot-item item-epic">Placa da Luz Sagrada</span>
-                </div>
+                {/* STATUS dinamicamente */}
+                <div className="character-stats-grid">
+                  <div className="stat-block stat-hp">
+                    <i data-feather="heart"></i>
+                    <h4>HP (Vida)</h4>
+                    <span className="stat-value">
+                      {personagens[0].pontosVidaAtual} / {personagens[0].pontosVidaMax}
+                    </span>
+                    <div className="stat-bar">
+                      <div
+                        style={{
+                          width:
+                            (personagens[0].pontosVidaAtual /
+                              personagens[0].pontosVidaMax) *
+                              100 +
+                            "%",
+                        }}
+                      ></div>
+                    </div>
+                  </div>
 
-                <div className="slot">
-                  <i data-feather="award"></i>
-                  <span className="slot-name">Colar</span>
-                  <span className="slot-item item-rare">Amuleto do Poder</span>
+                  <div className="stat-block stat-mana">
+                    <i data-feather="droplet"></i>
+                    <h4>MP (Mana)</h4>
+                    <span className="stat-value">
+                      {personagens[0].pontosManaAtual} / {personagens[0].pontosManaMax}
+                    </span>
+                    <div className="stat-bar">
+                      <div
+                        style={{
+                          width:
+                            (personagens[0].pontosManaAtual /
+                              personagens[0].pontosManaMax) *
+                              100 +
+                            "%",
+                        }}
+                      ></div>
+                    </div>
+                  </div>
                 </div>
+              </div>    
+            </>
+          )}
+            
 
-                <div className="slot">
-                  <i data-feather="maximize"></i>
-                  <span className="slot-name">Anel 1</span>
-                  <span className="slot-item item-common">Anel de Ferro</span>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </main>
     </div>

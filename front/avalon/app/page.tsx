@@ -1,5 +1,5 @@
 import Image from "next/image";
-
+import Link from "next/link";
 export default function Home() {
   return (
     <div>
@@ -56,7 +56,10 @@ export default function Home() {
         </div>
         
         <div className="hero-image-wrapper">
-            <Image src="/images/guerreiro.jpg" className="hero-character" alt="Personagem RPG"
+            <Image 
+            src="/images/guerreiro.jpg" 
+            className="hero-character" 
+            alt="Personagem RPG"
              width={500}
             height={500}
             />
@@ -154,7 +157,9 @@ export default function Home() {
 
         </div>
     </section>
-
+        <Link className="btn-dashboard-primary" href="/createcharacter">
+  Criar personagem!
+  </Link>
 
     <section id="como-comecar" className="como-comecar">
         <h2>Como Começar</h2>

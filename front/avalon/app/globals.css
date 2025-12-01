@@ -1145,6 +1145,7 @@ h1, h2, h3 {
 /* Conteúdo Central */
 .dashboard-content {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 80px); /* Altura total menos navbar */
@@ -1220,6 +1221,14 @@ h1, h2, h3 {
 .btn-dashboard-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(195, 118, 255, 0.4);
+}
+
+#criarPerso {
+    text-align: center;
+}
+
+#criarPerso a{
+    text-decoration: none;
 }
 
 /* Botão Vermelho/Laranja (Guildas) */
@@ -1819,6 +1828,8 @@ h1, h2, h3 {
         radial-gradient(2px 2px at 90% 60%, rgba(195, 118, 255, 0.2), transparent);
     background-size: 200% 200%;
     animation: particleMove 20s ease-in-out infinite;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes particleMove {
