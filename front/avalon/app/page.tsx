@@ -85,7 +85,7 @@ export default function Home() {
             </p>
 
             <div className="hero-buttons">
-                <a className="btn-primary" href="#">
+                <a className="btn-primary" href="/auth?mode=login">
                     <svg className="btn-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M10 2L3 7V17L10 22L17 17V7L10 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>

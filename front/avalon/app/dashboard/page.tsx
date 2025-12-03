@@ -16,65 +16,36 @@ export default function DashboardPage() {
     <div className="dashboard-body">
 
       {/* NAVBAR */}
-      <nav className="dash-navbar">
-        <div className="dash-logo">
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="url(#grad1)"
-            strokeWidth="2"
-          >
-            <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" />
-            <defs>
-              <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#c376ff" stopOpacity="1" />
-                <stop offset="100%" stopColor="#e5baff" stopOpacity="1" />
-              </linearGradient>
-            </defs>
-          </svg>
-
-          <span className="logo-text">Avalon</span>
-        </div>
-
-        <div className="dash-menu">
-          <a href="/character" className="dash-link active">
-            <User />
-            <span>Meu Personagem</span>
-          </a>
-
-          <a href="/guild" className="dash-link">
-            <Users />
-            <span>Guilda</span>
-          </a>
-
-          <a href="#" className="dash-link">
-            <Rss />
-            <span>Feed</span>
-          </a>
-
-          <a href="#" className="dash-link">
-            <MessageSquare />
-            <span>Taverna</span>
-          </a>
-
-          <a href="#" className="dash-link">
-            <Box />
-            <span>Inventário</span>
-          </a>
-        </div>
-
-        <div className="dash-profile">
-          <div className="avatar-circle">
-            <User />
+        <nav className="dash-navbar">
+          <div className="dash-logo">
+            <svg width="24" height="24" fill="none" stroke="url(#grad1)" strokeWidth="2">
+              <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" />
+              <defs>
+                <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#c376ff" />
+                  <stop offset="100%" stopColor="#e5baff" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <span className="logo-text">Avalon</span>
           </div>
 
-          <a href="/" className="logout-link">
-            <LogOut />
-          </a>
-        </div>
-      </nav>
+          <div className="dash-menu">
+            <a href="/character" className="dash-link">
+              <User />
+              <span>Meu Personagem</span>
+            </a>
+            <a href="/dashboard" className="dash-link active">
+                <i data-feather="rss"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="/guild" className="dash-link">
+              <Users />
+              <span>Guilda</span>
+            </a>
+          </div>
+        </nav>
+
 
       {/* MAIN */}
       <main className="dashboard-content">
@@ -91,7 +62,7 @@ export default function DashboardPage() {
             <div className="action-section">
               <p>Para começarmos, que tal criarmos seu personagem?</p>
 
-              <a href="/characters" className="btn-dashboard-primary">
+              <a href="/character" className="btn-dashboard-primary">
                 <PlusCircle />
                 Crie seu Personagem
               </a>
@@ -105,7 +76,7 @@ export default function DashboardPage() {
             <div className="action-section secondary">
               <p>Interaja com outros personagens!</p>
 
-              <a href="/guilds" className="btn-dashboard-guild">
+              <a href="/guild" className="btn-dashboard-guild">
                 <Shield />
                 Veja as Guildas
               </a>

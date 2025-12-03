@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from "react";
-import { Mail, Lock, User, ArrowLeft } from "react-feather"
+import { Mail, Lock, User, ArrowLeft, PlusCircle } from "react-feather"
 import Script from "next/script"
 import Link from "next/link";
 
@@ -74,8 +74,10 @@ export default function Auth() {
                         </label>
                         <input type="password" id="loginPassword" placeholder="********" required />
                     </div>
-
-                    <button type="submit" className="btn-auth-primary">Entrar no Reino</button>
+                    <a href="/dashboard" className="btn-dashboard-primary">
+                                    Entrar
+                    </a>
+                    
                 </form>
                 )} 
                 
@@ -114,7 +116,9 @@ export default function Auth() {
                         <input type="password" id="confirmPassword" placeholder="********" required />
                     </div>
 
-                    <button type="submit" className="btn-auth-primary">Começar Aventura</button>
+                   <a href="/dashboard" className="btn-dashboard-primary">
+                                    Começar Aventura
+                    </a>
                 </form>
                 )}
                 
